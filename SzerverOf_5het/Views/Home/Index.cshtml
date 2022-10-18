@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<Hirdetes>
+@inject SignInManager<SiteUser> SignInManager
+@inject UserManager<SiteUser> UserManager
+@{
+	var thisuser = await UserManager.GetUserAsync(User);
+}
+	@foreach(var hirdetes in Model.Where(t=>t.Oraber>=thisuser.MinSal).GroupBy(t=>t.Pos)){
+		<li>@hirdetes.Key
+			<ul>
+				@foreach(var owner in hirdetes){
+					<li>
+						<ul>
+							@owner.Oraber
+						</ul>
+						<ul>
+							@owner.Description
+						</ul>
+						<ul>
+							@if(owner.OwnerId == UserManager.GetUserId(User))
+							{
+								<a href="Home/Delete?Uid=@owner.Uid">Delete</a>
+							}
+						</ul>
+					</li>
+				}
+			</ul>
+		</li>
+	}
