@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SzerverOf_5het.Data;
 
@@ -11,9 +12,10 @@ using SzerverOf_5het.Data;
 namespace SzerverOf_5het.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018165727_test001")]
+    partial class test001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,17 +267,12 @@ namespace SzerverOf_5het.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HirdetesUid")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MinSal")
                         .HasColumnType("int");
-
-                    b.HasIndex("HirdetesUid");
 
                     b.HasDiscriminator().HasValue("SiteUser");
                 });
@@ -340,18 +337,6 @@ namespace SzerverOf_5het.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("SzerverOf_5het.Models.SiteUser", b =>
-                {
-                    b.HasOne("SzerverOf_5het.Models.Hirdetes", null)
-                        .WithMany("Applicants")
-                        .HasForeignKey("HirdetesUid");
-                });
-
-            modelBuilder.Entity("SzerverOf_5het.Models.Hirdetes", b =>
-                {
-                    b.Navigation("Applicants");
                 });
 #pragma warning restore 612, 618
         }

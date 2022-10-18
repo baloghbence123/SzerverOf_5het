@@ -5,25 +5,87 @@
 @{
 	var thisuser = await UserManager.GetUserAsync(User);
 }
+@{
+	if(thisuser!=null)
+{
 	@foreach(var hirdetes in Model.Where(t=>t.Oraber>=thisuser.MinSal).GroupBy(t=>t.Pos)){
-		<li>@hirdetes.Key
-			<ul>
-				@foreach(var owner in hirdetes){
-					<li>
+	<li>@hirdetes.Key
 						<ul>
-							@owner.Oraber
-						</ul>
-						<ul>
-							@owner.Description
-						</ul>
-						<ul>
-							@if(owner.OwnerId == UserManager.GetUserId(User))
+							@foreach(var hird in hirdetes)
 							{
-								<a href="Home/Delete?Uid=@owner.Uid">Delete</a>
+								<li>
+									<ul>
+										@hird.Oraber
+									</ul>
+									<ul>
+										@hird.Description
+									</ul>
+									
+								@if (hird.OwnerId == UserManager.GetUserId(User))
+								{
+									<ul>
+									@foreach(var aplicants in hird.Applicants){
+										<p>@aplicants.LastName @aplicants.FirstName,</p>
+									}
+									</ul>
+									<ul>
+									<a href="Home/Delete?Uid=@hird.Uid">Delete</a>
+									</ul>
+
+								}
+								@{
+									else
+									{
+										var applicant = hird.Applicants.FirstOrDefault(t => t.Id == thisuser.Id);
+										;
+										@if (applicant == null)
+										{
+											<ul>
+											<a href="Home/AddApplicant?Uid=@hird.Uid"> Jelentkezes </a>
+											</ul>
+										}
+										else
+										{
+											<ul>
+											<p> Eddig jelentkeztek: @hird.Applicants.Count</p>
+											</ul>
+										}
+									}
+								}
+									
+								</li>
 							}
 						</ul>
-					</li>
-				}
-			</ul>
-		</li>
+	</li>
 	}
+}
+	else
+{
+	@foreach (var hirdetes in Model.GroupBy(t => t.Pos))
+		{
+	<li>
+						@hirdetes.Key
+						<ul>
+							@foreach (var owner in hirdetes)
+					{
+								<li>
+									<ul>
+										@owner.Oraber
+									</ul>
+									<ul>
+										@owner.Description
+									</ul>
+									<ul>
+										@if (owner.OwnerId == UserManager.GetUserId(User))
+								{
+											<a href="Home/Delete?Uid=@owner.Uid">Delete</a>
+								}
+									</ul>
+								</li>
+					}
+						</ul>
+	</li>
+		}
+
+}
+}

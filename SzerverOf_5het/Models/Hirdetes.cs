@@ -13,9 +13,14 @@ namespace SzerverOf_5het.Models
         public string OwnerId { get; set; }
         [NotMapped]
         public virtual SiteUser Owner { get; set; }
+
+        public virtual ICollection<SiteUser> Applicants { get; set; }
+
+
         public Hirdetes()
         {
             Uid = Guid.NewGuid().ToString();
+            Applicants = new List<SiteUser>();
         }
     }
 }

@@ -82,6 +82,29 @@ namespace SzerverOf_5het.Controllers
             return View();
         }
 
+        public async Task<IActionResult> AddApplicant(string Uid)
+        {
+            //"f29c7e84-5040-43a3-b0a9-7dd85405fc61" , "883a7a40-e973-41f0-b3a0-1710eaa08518"
+            ;
+            var principal = this.User;
+            var user = await userManager.GetUserAsync(principal);
+
+            var item = _db.Hirdetesek.FirstOrDefault(t => t.Uid == Uid);
+            ;
+            if (item != null)
+            {
+                item.Applicants.Add(user);
+                
+                _db.SaveChanges();
+            }
+
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
